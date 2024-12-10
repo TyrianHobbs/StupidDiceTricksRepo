@@ -1,5 +1,5 @@
 module DiceTricks
-    import Random
+    import Random, Statistics
     export implode, rolltrials, roll_die, play_shoot_your_shot, simulate_shoot_your_shot, analyze_results
 
     """
@@ -30,61 +30,69 @@ module DiceTricks
         end
         return results
     end
-end
 
 
-#Shoot Your Shot Game
 
-function roll_die(sides::Int)
-    return rand(1:sides)
-end
+    #Shoot Your Shot Game
 
-function play_shoot_your_shot()
-    dice_chain = [4, 6, 8, 10, 12, 20]
-    total_score = 0
-    
-    println("Starting 'Shoot Your Shot'")
-    for sides in dice_chain
-        println("\nRolling a d$sides for the target...")
-        target = roll_die(sides)
-        println("Target roll is: $target")
+    """
+        roll_die(sides=6)
+    Roll a dice; returns an integer between 1 and the number of sides, inclusive. Defaults to a six-sided die.
+    """
+    function roll_die(sides=6)
+        return rand(1:sides)
+    end
+
+    function play_shoot_your_shot()
+        dice_chain = [4, 6, 8, 10, 12, 20]
+        total_score = 0
         
-        die_score = 0
-        achieved_target = false
-        
-        while !achieved_target
-            roll = roll_die(sides)
-            die_score += roll
-            println("Rolled a $roll")
-            if roll == target
-                println("Target achieved!")
-                achieved_target = true
+        println("Starting 'Shoot Your Shot'")
+        for sides in dice_chain
+            println("\nRolling a d$sides for the target...")
+            target = roll_die(sides)
+            println("Target roll is: $target")
+            
+            die_score = 0
+            achieved_target = false
+            
+            while !achieved_target
+                roll = roll_die(sides)
+                die_score += roll
+                println("Rolled a $roll")
+                if roll == target
+                    println("Target achieved!")
+                    achieved_target = true
+                end
             end
+            
+            total_score += die_score
+            println("Score for d$sides: $die_score")
         end
         
-        total_score += die_score
-        println("Score for d$sides: $die_score")
+        println("\nGame over! Total score: $total_score")
+        return total_score
     end
-    
-    println("\nGame over! Total score: $total_score")
-    return total_score
-end
 
-function simulate_shoot_your_shot(num_simulations::Int)
-    scores = []
-    
-    for _ in 1:num_simulations
-        score = play_shoot_your_shot()
-        push!(scores, score)
+    function simulate_shoot_your_shot(num_simulations::Int)
+        scores = []
+        
+        for _ in 1:num_simulations
+            score = play_shoot_your_shot()
+            push!(scores, score)
+        end
+        
+        return scores
     end
-    
-    return scores
-end
 
-function analyze_results(scores::Vector{Int})
-    println("\nResults Summary:")
-    println("Number of games: $(length(scores))")
-    println("Average score: $(mean(scores))")
-    println("Minimum score: $(minimum(scores))")
-    println("Maximum score: $(maximum(scores))")
-end
+    function analyze_results(scores::Vector{Int})
+        println("\nResults Summary:")
+        println("Number of games: $(length(scores))")
+        println("Average score: $(mean(scores))")
+        println("Minimum score: $(minimum(scores))")
+        println("Maximum score: $(maximum(scores))")
+        println("Variance: $(var(scores))")
+        println("Standard Deviation: $(std(scores))")
+    end
+
+end #module DiceTricks
