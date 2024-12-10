@@ -1,6 +1,6 @@
 module DiceTricks
     import Random, Statistics
-    export implode, rolltrials, roll_die, play_shoot_your_shot, simulate_shoot_your_shot, analyze_results
+    export implode, rolltrials, roll_die, play_shoot_your_shot, simulate_shoot_your_shot, analyze_results, explode, multiple_explodetrials
 
     """
     implode(size::Int; target=1)
