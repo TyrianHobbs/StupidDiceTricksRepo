@@ -1,6 +1,6 @@
 module DiceTricks
     import Random
-    export implode, rolltrials
+    export implode, rolltrials, roll_die, play_shoot_your_shot, simulate_shoot_your_shot, analyze_results
 
     """
     implode(size::Int; target=1)
@@ -32,4 +32,59 @@ module DiceTricks
     end
 end
 
-#Test that Mackenzie was here & can edit!
+
+#Shoot Your Shot Game
+
+function roll_die(sides::Int)
+    return rand(1:sides)
+end
+
+function play_shoot_your_shot()
+    dice_chain = [4, 6, 8, 10, 12, 20]
+    total_score = 0
+    
+    println("Starting 'Shoot Your Shot'")
+    for sides in dice_chain
+        println("\nRolling a d$sides for the target...")
+        target = roll_die(sides)
+        println("Target roll is: $target")
+        
+        die_score = 0
+        achieved_target = false
+        
+        while !achieved_target
+            roll = roll_die(sides)
+            die_score += roll
+            println("Rolled a $roll")
+            if roll == target
+                println("Target achieved!")
+                achieved_target = true
+            end
+        end
+        
+        total_score += die_score
+        println("Score for d$sides: $die_score")
+    end
+    
+    println("\nGame over! Total score: $total_score")
+    return total_score
+end
+
+function simulate_shoot_your_shot(num_simulations::Int)
+    scores = []
+    
+    for _ in 1:num_simulations
+        score = play_shoot_your_shot()
+        push!(scores, score)
+    end
+    
+    return scores
+end
+
+function analyze_results(scores::Vector{Int})
+    println("\nResults Summary:")
+    println("Number of games: $(length(scores))")
+    println("Average score: $(mean(scores))")
+    println("Minimum score: $(minimum(scores))")
+    println("Maximum score: $(maximum(scores))")
+end
