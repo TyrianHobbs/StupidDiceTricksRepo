@@ -1,7 +1,7 @@
 module DiceTricks
 import Random
 import Statistics: mean, std
-    export implode, rolltrials, roll_die, play_shoot_your_shot, simulate_shoot_your_shot, analyze_results, explode, multiple_explodetrials
+export implode, rolltrials, roll_die, play_shoot_your_shot, simulate_shoot_your_shot, analyze_results, explode, multiple_explodetrials
 
 """
 implode(size::Int; target=1)
@@ -27,7 +27,7 @@ Run trials on a certain dice function, and return a vector of all the results.
 function rolltrials(f::Function, trials::Integer; size=6)
     local results = Int[]
     for i = 1:trials
-        push!(results, f(size))
+        push!(results, f())
     end
     return results
 end
@@ -89,10 +89,10 @@ end
 function analyze_results(scores::Vector{Int})
     println("\nResults Summary:")
     println("Number of games: $(length(scores))")
-    println("Average score: $(Statistics.mean(scores))")
+    println("Average score: $(mean(scores))")
     println("Minimum score: $(minimum(scores))")
     println("Maximum score: $(maximum(scores))")
-    println("Standard Deviation: $(Statistics.std(scores))")
+    println("Standard Deviation: $(std(scores))")
 end
 
     #Exploding Dice Game

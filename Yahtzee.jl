@@ -116,7 +116,7 @@ function scorePool(pool::Vector{Int})
         scoretype = "Chance"
     end
     local t = scoreThreeOfAKind(pool)
-    if t > maxscore
+    if t >= maxscore
         maxscore = t
         scoretype = "Three Of A Kind"
     end
