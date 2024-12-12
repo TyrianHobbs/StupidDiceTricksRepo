@@ -1,6 +1,6 @@
 module Yahtzee
 import Random.rand
-export rollPool, validatePool, fillPool, scorePool, rerollForStraight
+export rollPool, validatePool, fillPool, scoreThreeOfAKind, scoreFourOfAKind, scoreFullHouse, scoreLowStraight, scoreHighStraight, scoreYahtzee, scoreChance, scorePool, rerollForStraight 
 
 """
     rollPool()
