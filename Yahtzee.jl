@@ -111,7 +111,7 @@ function scorePool(pool::Vector{Int})
     local maxscore = 0
     local scoretype = ""
     t = scoreChance(pool)
-    if t > maxscore
+    if t >= maxscore
         maxscore = t
         scoretype = "Chance"
     end
@@ -126,22 +126,22 @@ function scorePool(pool::Vector{Int})
         scoretype = "Four Of A Kind"
     end
     t = scoreFullHouse(pool)
-    if t > maxscore
+    if t >= maxscore
         maxscore = t
         scoretype = "Full House"
     end
     t = scoreLowStraight(pool)
-    if t > maxscore
+    if t >= maxscore
         maxscore = t
         scoretype = "Low Straight"
     end
     t = scoreHighStraight(pool)
-    if t > maxscore
+    if t >= maxscore
         maxscore = t
         scoretype = "High Straight"
     end
     t = scoreYahtzee(pool)
-    if t > maxscore
+    if t >= maxscore
         maxscore = t
         scoretype = "Yahtzee"
     end
@@ -150,11 +150,12 @@ end
 
 function rerollForStraight(pool::Vector{Int})
     validatePool(pool)
-    if pool[1] == 1 && p[5] == 6
-        popfirst!(pool)
+    p = pool
+    if p[1] == 1 && p[5] == 6
+        popfirst!(p)
     end
-    unique!(pool)
-    fillPool(pool)
+    unique!(p)
+    sort(fillPool(p))
 end
 
 end #Module Yahtzee
