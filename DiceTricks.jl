@@ -1,7 +1,7 @@
 module DiceTricks
 import Random
 import Statistics: mean, std
-export implode, rolltrials, roll_die, play_shoot_your_shot, simulate_shoot_your_shot, analyze_results
+    export implode, rolltrials, roll_die, play_shoot_your_shot, simulate_shoot_your_shot, analyze_results, explode, multiple_explodetrials
 
 """
 implode(size::Int; target=1)
@@ -94,5 +94,37 @@ function analyze_results(scores::Vector{Int})
     println("Maximum score: $(maximum(scores))")
     println("Standard Deviation: $(Statistics.std(scores))")
 end
+
+    #Exploding Dice Game
+    """
+    explode(mad::Int)
+    Enter max sides on single die. Roll until result is not max, add all rolls together.
+    """
+    function explode(max::Int)
+        local sum=0
+        if max<0
+            throw(ArgumentError("This number on a n-sided die has to be greater than 0"))
+        end
+        check = max
+        roll = rand(1:max)
+        while roll == check
+            sum += roll 
+            roll = rand(1:max)
+        end
+        sum += roll
+        return sum
+    end
+
+    """
+    mutiple_explodetrials(f::Function, trials::Int, max::Int)
+    Run trials on explode dice function. Returns vector of all scores.
+    """
+    function multiple_explodetrials(f::Function, trials::Int, max::Int)
+        local results = Int[]
+        for i in 1:trials 
+            push!(results, f(max))
+        end
+        return results
+    end 
 
 end #module DiceTricks
