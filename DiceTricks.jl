@@ -8,7 +8,7 @@ implode(size::Int; target=1)
 
 Continue rolling a die until a target is hit. Adds together the sum of all the rolls, including the final target.
 """
-function implode(size::Int; target=1)
+function implode(size=6, target=1)
     size > 0 || throw(ArgumentError("That size of die is not possible."))
     target > 0 && target <= size || throw(ArgumentError("The given target is not possible on that size die."))
     local sum = 0
@@ -24,10 +24,10 @@ end
 """
 Run trials on a certain dice function, and return a vector of all the results.
 """
-function rolltrials(f::Function, trials::Integer; size=6)
+function rolltrials(f::Function, trials::Integer)
     local results = Int[]
     for i = 1:trials
-        push!(results, f())
+        push!(results, f(size))
     end
     return results
 end
@@ -48,11 +48,8 @@ function play_shoot_your_shot()
     dice_chain = [4, 6, 8, 10, 12, 20]
     total_score = 0
     
-    println("Starting 'Shoot Your Shot'")
     for sides in dice_chain
-        println("\nRolling a d$sides for the target...")
         target = roll_die(sides)
-        println("Target roll is: $target")
         
         die_score = 0
         achieved_target = false
@@ -60,23 +57,18 @@ function play_shoot_your_shot()
         while !achieved_target
             roll = roll_die(sides)
             die_score += roll
-            println("Rolled a $roll")
             if roll == target
-                println("Target achieved!")
                 achieved_target = true
             end
         end
         
         total_score += die_score
-        println("Score for d$sides: $die_score")
     end
-    
-    println("\nGame over! Total score: $total_score")
     return total_score
 end
 
 function simulate_shoot_your_shot(num_simulations::Int)
-    scores = []
+    scores = Int[]
     
     for _ in 1:num_simulations
         score = play_shoot_your_shot()
