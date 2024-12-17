@@ -1,6 +1,6 @@
 module Yahtzee
-import Random.rand
-export rollPool, validatePool, fillPool, scoreThreeOfAKind, scoreFourOfAKind, scoreFullHouse, scoreLowStraight, scoreHighStraight, scoreYahtzee, scoreChance, scorePool, rerollForStraight 
+import Random.rand, StatsBase.mode, StatsBase.modes
+export rollPool, validatePool, fillPool, scoreThreeOfAKind, scoreFourOfAKind, scoreFullHouse, scoreLowStraight, scoreHighStraight, scoreYahtzee, scoreChance, scorePool, rerollForStraight, rerollForYahtzee, rerollForFullHouse
 
 """
     rollPool()
@@ -150,12 +150,37 @@ end
 
 function rerollForStraight(pool::Vector{Int})
     validatePool(pool)
-    p = pool
+    local p = pool #So things aren't occuring 'in place'. (May not actually work.)
     if p[1] == 1 && p[5] == 6
-        popfirst!(p)
+        popfirst!(p) #If both a 1 and 6 are present, get rid of the 1.
     end
     unique!(p)
+    fillPool(p)
+end
+
+function rerollForYahtzee(pool::Vector{Int})
+    validatePool(pool)
+    local p = pool
+    t = mode(reverse(p)) #If all the numbers are unique or if multiple modes exist, take the highest.
+    p = filter(isequal(t), p)
     sort(fillPool(p))
+end
+
+function rerollForFullHouse(pool::Vector{Int})
+    validatePool(pool)
+    local p = pool
+    t = modes(reverse(p)) #Keeps multiple modes!
+    if length(t) == 1
+        p = filter(isequal(t[1]), p)
+        return sort(fillPool(p))
+    elseif length(t) == 2
+        p = filter(x -> x==t[1]||x==t[2], p)
+        return sort(fillPool(p))
+    else 
+        q = Int[]
+        push!(q, p[5])
+        return sort(fillPool(q))
+    end
 end
 
 end #Module Yahtzee
